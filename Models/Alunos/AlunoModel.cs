@@ -7,7 +7,7 @@ namespace APIEscola.Models.Alunos
     {
         public int Id { get; set; }
         public string Nome { get; set; }
-        [JsonIgnore]
+       // [JsonIgnore]
         public ICollection<DisciplinaModel> Disciplinas { get; set; }
     }
 

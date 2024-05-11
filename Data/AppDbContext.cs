@@ -1,5 +1,6 @@
 ﻿using APIEscola.Models.Alunos;
 using APIEscola.Models.Disciplinas;
+using APIEscola.Models.Professores;
 using Microsoft.EntityFrameworkCore;
 
 namespace APIEscola.Data
@@ -12,6 +13,7 @@ namespace APIEscola.Data
     }
         public DbSet<AlunoModel> Aluno { get; set; }
         public DbSet<DisciplinaModel> Disciplina { get; set; }
+        public DbSet<ProfessoresModel> Professor { get; set; }
 
     }
 }

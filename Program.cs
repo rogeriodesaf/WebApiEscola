@@ -1,4 +1,7 @@
 using APIEscola.Data;
+using APIEscola.Repositorios.Services.Alunos;
+using APIEscola.Repositorios.Services.Disciplina;
+using APIEscola.Repositorios.Services.Professores;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +12,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IAlunoInterface, AlunoService>();
+builder.Services.AddScoped<IDisciplinaInterface, DisciplinaService>();
+builder.Services.AddScoped<IProfessorInterface, ProfessorService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
