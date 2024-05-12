@@ -47,7 +47,9 @@ namespace APIEscola.Repositorios.Services.Alunos
             ResponseModel<List<AlunoModel>> response = new ResponseModel<List<AlunoModel>>();
             try
             {
-                var alunos = await _context.Aluno.ToListAsync();
+                var alunos = await _context.Aluno
+              
+                    .ToListAsync();
                 if(alunos is null)
                 {
                     response.Mensagem = "";
@@ -55,7 +57,11 @@ namespace APIEscola.Repositorios.Services.Alunos
                     return response;
                 }
 
+
+
                 response.Dados = alunos;
+                    
+                   
                 response.Mensagem = "Sucess";
                 return response;
             }
@@ -241,5 +247,30 @@ O método ToList()converte o resultado do filtro em uma lista de disciplinas e
 
         }
 
+        public async Task<ResponseModel<List<AlunoModel>>> GetAllAlunosWithDisciplinasAsync()
+        {
+           var response = new ResponseModel<List<AlunoModel>>();
+            try
+            {
+                var aluno = await _context.Aluno
+                    .AsNoTracking()
+                    .Include(_ => _.Disciplinas)
+                    .ToListAsync();
+
+                response.Dados = aluno;
+                response.Mensagem = "massa";
+              
+
+            }
+            catch (Exception ex)
+            {
+
+
+                response.Mensagem = ex.Message;
+                response.Status = false;
+                return response;
+            }
+            return response;
+        }
     }
 }

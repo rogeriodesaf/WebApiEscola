@@ -77,5 +77,16 @@ namespace APIEscola.Controllers
             }
             return Ok(professor);
         }
+        [HttpGet("LIstarProfessoresComDisciplinas")]
+        public async Task<ActionResult<ResponseModel<List<ProfessoresModel>>>> GetAllProfessoresComDisciplinas()
+        {
+            var professores = await _professorInterface.GetAllProfessoresComDisciplinas();
+            if(professores == null)
+            {
+                return NotFound(professores.Mensagem);
+            }
+            return Ok(professores);
+        }
+        
     }
 }

@@ -15,6 +15,9 @@ namespace APIEscola.Repositorios.Services.Professores
 
         public Task<ResponseModel<List<ProfessoresModel>>> associarProfessorDisciplinaId(int idProfessor, List<int> disciplinaId);
 
+        public Task<ResponseModel<List<ProfessoresModel>>> GetAllProfessoresComDisciplinas();
+       
+
 
     }
 }

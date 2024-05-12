@@ -13,5 +13,7 @@ namespace APIEscola.Repositorios.Services.Alunos
         public Task<ResponseModel<List<AlunoModel>>> deleteAlunos(int id);
 
         public Task<ResponseModel<List<AlunoModel>>> AssociarAlunoADisciplinas(int alunoId, List<int> disciplinaIds);
+        public Task<ResponseModel<List<AlunoModel>>> GetAllAlunosWithDisciplinasAsync();
     }
+
 }

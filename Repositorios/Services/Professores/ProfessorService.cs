@@ -14,6 +14,8 @@ namespace APIEscola.Repositorios.Services.Professores
             _context = context; 
         }
 
+      
+
         public async Task<ResponseModel<List<ProfessoresModel>>> associarProfessorDisciplinaId(int idProfessor, List<int> disciplinaId)
         {
             var response = new ResponseModel<List<ProfessoresModel>>();
@@ -71,6 +73,29 @@ namespace APIEscola.Repositorios.Services.Professores
             {
 
                 response.Mensagem = ex.Message;
+                response.Status = false;
+                return response;
+            }
+            return response;
+        }
+
+        public async  Task<ResponseModel<List<ProfessoresModel>>> GetAllProfessoresComDisciplinas()
+        {
+            var response = new ResponseModel<List<ProfessoresModel>>();
+            try
+            {
+                var professores = await _context.Professor
+                    .Include(a =>a.Disciplina)
+                    .ToListAsync();
+
+                response.Dados = professores;
+                response.Mensagem = "Legal, tá dando certo!";
+                
+            }
+            catch (Exception ex)
+            {
+
+                response.Mensagem = "droga "+ex.Message;
                 response.Status = false;
                 return response;
             }

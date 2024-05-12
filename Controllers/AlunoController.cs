@@ -73,6 +73,15 @@ namespace APIEscola.Controllers
             }
             return Ok(alunos);  
         }
+        [HttpGet("ListarAlunosComSuasDisciplinas")]
+        public async Task<ActionResult<ResponseModel<List<AlunoModel>>>> GetAllAlunosWithDisciplinasAsync()
+        {
+            var alunos = await _alunoInterface.GetAllAlunosWithDisciplinasAsync();
+            if (alunos == null)
+            {
+                return NotFound(alunos.Mensagem);
+            }
+            return Ok(alunos);
+        }
     }
 }
-
