@@ -13,19 +13,117 @@ namespace APIEscola.Repositorios.Services.Professores
         {
             _context = context; 
         }
-        public Task<ResponseModel<List<ProfessoresModel>>> deleteProfessor(int id)
+
+        public async Task<ResponseModel<List<ProfessoresModel>>> associarProfessorDisciplinaId(int idProfessor, List<int> disciplinaId)
         {
-            throw new NotImplementedException();
+            var response = new ResponseModel<List<ProfessoresModel>>();
+            try
+            {
+                var professor = await _context.Professor
+                    .Include(b =>b.Disciplina)
+                    .FirstAsync(a =>a.Id == idProfessor);
+                //validations
+
+                var disciplina = await _context.Disciplina
+                    .Where(disdB => disciplinaId.Contains(disdB.Id))
+                    .ToArrayAsync();
+
+             foreach(var disciplinas in disciplina)
+                {
+                    professor.Disciplina.Add(disciplinas);
+                }
+
+                await _context.SaveChangesAsync();
+
+                response.Dados = await _context.Professor
+                    .Include(a => a.Disciplina).ToListAsync();
+                response.Mensagem = "Glória a Deus!";
+            }
+            catch (Exception ex)
+            {
+
+                response.Mensagem = "Deu errado "+ex.Message;
+                response.Status = false;
+                return response;
+            }
+
+            return response;
+        }
+        public async Task<ResponseModel<List<ProfessoresModel>>> deleteProfessor(int id)
+        {
+            var response = new ResponseModel<List<ProfessoresModel>>();
+            try
+            {
+                var professor = await _context.Professor.FirstOrDefaultAsync(a => a.Id == id);
+                if(professor == null)
+                {
+                    response.Mensagem = "deu errado!";
+                    response.Status = false;
+                    return response;
+                }
+                _context.Professor.Remove(professor);
+                await _context.SaveChangesAsync();
+
+                response.Dados = await _context.Professor.ToListAsync();
+                response.Mensagem = "Professor deletado!";
+            }
+            catch (Exception ex)
+            {
+
+                response.Mensagem = ex.Message;
+                response.Status = false;
+                return response;
+            }
+            return response;
         }
 
-        public Task<ResponseModel<List<ProfessoresModel>>> getProfessores()
+        public async Task<ResponseModel<List<ProfessoresModel>>> getProfessores()
         {
-            throw new NotImplementedException();
+            var response = new ResponseModel<List<ProfessoresModel>>();
+            try
+            {
+                var professores = await _context.Professor.ToListAsync();
+                if(professores != null)
+                {
+                    response.Dados = professores;
+                    response.Status = false;
+                    response.Mensagem = "Professor adicionado com sucesso!";
+                }
+
+               
+            }
+            catch (Exception ex)
+            {
+
+                response.Mensagem = "Deu algo muito errado " + ex.Message;
+                response.Status = false;
+                return response;
+            }
+            return response;
         }
 
-        public Task<ResponseModel<List<ProfessoresModel>>> getProfessorPorDisciplinaId(int idDisciplina)
+        public async  Task<ResponseModel<ProfessoresModel>> getProfessorPorDisciplinaId(int idDisciplina)
         {
-            throw new NotImplementedException();
+            var response = new ResponseModel<ProfessoresModel>();
+            try
+            {
+                var professor = await _context.Professor
+                    .Include(a => a.Disciplina)
+                    .FirstOrDefaultAsync(profBanco => profBanco.Id == idDisciplina);
+
+                response.Dados = professor;
+                response.Mensagem = "Deu certo";
+               
+
+                
+            }
+            catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
+                response.Status = false;
+                return response;
+            }
+            return response;
         }
 
         public Task<ResponseModel<ProfessoresModel>> getProfessorPorId(int id)
@@ -66,9 +164,33 @@ namespace APIEscola.Repositorios.Services.Professores
             return response;
         }
 
-        public Task<ResponseModel<List<ProfessoresModel>>> putProfessor(ProfessorEdicaoDto professorEdicaoDto)
+        public async Task<ResponseModel<List<ProfessoresModel>>> putProfessor(ProfessorEdicaoDto professorEdicaoDto)
         {
-            throw new NotImplementedException();
+            var response = new ResponseModel<List<ProfessoresModel>>();
+            try
+            {
+                var professores = await _context.Professor
+                    .FirstOrDefaultAsync(a => a.Id == professorEdicaoDto.Id);
+                if(professores != null)
+                {
+                    professores.Id = professorEdicaoDto.Id;
+                    professores.Nome = professorEdicaoDto.Nome;
+                }
+
+                _context.Professor.Update(professores);
+                await _context.SaveChangesAsync();
+
+                response.Dados = await _context.Professor.ToListAsync();
+                response.Mensagem = "deu certo !";
+            }
+            catch (Exception ex)
+            {
+
+               response.Mensagem = ex.Message;
+                response.Status = false;
+                return response;
+            }
+            return response;
         }
     }
 }
