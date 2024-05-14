@@ -6,3 +6,4 @@
         public List<int> DisciplinaId { get; set; }
     }
 }
+

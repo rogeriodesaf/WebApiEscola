@@ -1,6 +1,7 @@
 ﻿using APIEscola.Data;
 using APIEscola.Dto.Disciplinas;
 using APIEscola.Models;
+using APIEscola.Models.Alunos;
 using APIEscola.Models.Disciplinas;
 using Microsoft.EntityFrameworkCore;
 
@@ -69,61 +70,7 @@ namespace APIEscola.Repositorios.Services.Disciplina
             }
         }
 
-        public async Task<ResponseModel<List<DisciplinaModel>>> getDisciplinaPorAlunoId(int idAluno)
-        {
-           var response = new ResponseModel<List<DisciplinaModel>>();
-            try
-            {
-                var disciplinas = await _context.Disciplina
-            .Where(a => a.Alunos.Any(d => d.Id == idAluno)) // Filtra pelos alunos associados à disciplina desejada
-            .Select(a => new DisciplinaModel
-            {
-                Id = a.Id,
-                Nome = a.Nome,
-                Alunos = a.Alunos.Where(d => d.Id == idAluno).ToList() // Filtra e inclui apenas a disciplina desejada para cada aluno
-            })
-            .ToListAsync();
-
-                response.Dados = disciplinas;
-                response.Mensagem = "Dados retornados com sucesso";
-            }
-            catch (Exception ex)
-            {
-                response.Mensagem = "Deu erro" + ex.Message; 
-                response.Status= false;
-                return response;
-            }
-            return response;
-        }
-
-
-        public async Task<ResponseModel<DisciplinaModel>> getDisciplinaPorId(int id)
-        {
-            var response = new ResponseModel<DisciplinaModel>();
-            try
-            {
-                var disciplina = await _context.Disciplina
-                    .FirstOrDefaultAsync(a => a.Id == id);
-                if(disciplina == null)
-                {
-                    response.Mensagem = "Erro";
-                    response.Status = false;
-                    return response;
-                }
-
-                response.Dados = disciplina;
-                response.Mensagem = "Sucesso!";
-            }
-            catch (Exception ex)
-            {
-
-                response.Mensagem = "Deu errado hein "+ex.Message;
-                response.Status = false;
-                return response;
-            }
-            return response;
-        }
-
+       
         public async Task<ResponseModel<List<DisciplinaModel>>> postDisciplina(DisciplinaCriacaoDto disciplinaCriacaoDto)
         {
             ResponseModel<List<DisciplinaModel>> response = new ResponseModel<List<DisciplinaModel>>();
@@ -191,5 +138,66 @@ namespace APIEscola.Repositorios.Services.Disciplina
             }
             return response;
         }
+
+       
+        
+          
+            public async Task<ResponseModel<DisciplinaModel>> getDisciplinaPorId(int id)
+            {
+                var response = new ResponseModel<DisciplinaModel>();
+                try
+                {
+                    var disciplina = await _context.Disciplina
+                        .FirstOrDefaultAsync(a => a.Id == id);
+                    if (disciplina == null)
+                    {
+                        response.Mensagem = "Erro";
+                        response.Status = false;
+                        return response;
+                    }
+
+                    response.Dados = disciplina;
+                    response.Mensagem = "Sucesso!";
+                }
+                catch (Exception ex)
+                {
+
+                    response.Mensagem = "Deu errado hein " + ex.Message;
+                    response.Status = false;
+                    return response;
+                }
+                return response;
+            }
+
+
+
+        public async Task<ResponseModel<List<DisciplinaModel>>> getDisciplinaPorAlunoId(int idAluno)
+        {
+            var response = new ResponseModel<List<DisciplinaModel>>();
+            try
+            {
+                var disciplina = await _context.Disciplina
+
+                   .Where(bdDisc => bdDisc.Alunos.Any(alubd => alubd.Id == idAluno))
+                   .Select(bdDisc => new DisciplinaModel
+                   {
+                       Id = bdDisc.Id,
+                       Nome = bdDisc.Nome,
+                       Alunos = bdDisc.Alunos.Where(alubd => alubd.Id == idAluno).ToList()
+
+                   })
+                   .ToListAsync();
+
+                response.Dados = disciplina;
+                response.Mensagem = "Deu certo né";
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return response;
+        }
     }
+
 }

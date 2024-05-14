@@ -249,28 +249,28 @@ O método ToList()converte o resultado do filtro em uma lista de disciplinas e
 
         public async Task<ResponseModel<List<AlunoModel>>> GetAllAlunosWithDisciplinasAsync()
         {
-           var response = new ResponseModel<List<AlunoModel>>();
+            var response = new ResponseModel<List<AlunoModel>>();
             try
             {
-                var aluno = await _context.Aluno
-                    .AsNoTracking()
-                    .Include(_ => _.Disciplinas)
-                    .ToListAsync();
+                var alunosComDisciplinas = await _context.Aluno
+            .Include(a => a.Disciplinas)  // Incluir as disciplinas relacionadas com cada aluno
+               
+            .ToListAsync();
 
-                response.Dados = aluno;
-                response.Mensagem = "massa";
-              
+                response.Dados = alunosComDisciplinas;
+                response.Mensagem = "Legal, tá dando certo!";
 
             }
             catch (Exception ex)
             {
 
-
-                response.Mensagem = ex.Message;
+                response.Mensagem = "droga " + ex.Message;
                 response.Status = false;
                 return response;
             }
             return response;
         }
+
     }
 }
+//GetAllAlunosWithDisciplinasAsync

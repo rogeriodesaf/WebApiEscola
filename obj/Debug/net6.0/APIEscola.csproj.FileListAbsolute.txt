@@ -81,3 +81,4 @@ C:\Users\c157751\source\repos\APIEscola\obj\Debug\net6.0\refint\APIEscola.dll
 C:\Users\c157751\source\repos\APIEscola\obj\Debug\net6.0\APIEscola.pdb
 C:\Users\c157751\source\repos\APIEscola\obj\Debug\net6.0\APIEscola.genruntimeconfig.cache
 C:\Users\c157751\source\repos\APIEscola\obj\Debug\net6.0\ref\APIEscola.dll
+C:\Users\c157751\source\repos\APIEscola\bin\Debug\net6.0\Newtonsoft.Json.dll
